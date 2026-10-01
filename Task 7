@@ -1,0 +1,125 @@
+import matplotlib.pyplot as plt
+
+class RobotGraphColoring:
+
+    def __init__(self, vertices, edges, colors):
+        self.vertices = vertices
+        self.edges = edges
+        self.colors = colors
+        self.assignment = {}
+
+    def greedy_coloring(self):
+
+        for node in self.vertices:
+
+            used_colors = set()
+
+            for neighbor in self.edges[node]:
+                if neighbor in self.assignment:
+                    used_colors.add(self.assignment[neighbor])
+
+            for color in self.colors:
+                if color not in used_colors:
+                    self.assignment[node] = color
+                    break
+
+    def display(self):
+
+        self.greedy_coloring()
+
+        print("Robot navigation zone coloring:")
+
+        for node in self.vertices:
+            print(node, "->", self.assignment[node])
+
+        print("\nGraph coloring:")
+
+        for node in self.vertices:
+            print("Zone", node, ":", self.assignment[node])
+
+        print(
+            "\nTotal number of colors used:",
+            len(set(self.assignment.values()))
+        )
+
+        positions = {
+            "A": (0, 3),
+            "B": (-2, 2),
+            "C": (2, 2),
+            "D": (-2, 0),
+            "E": (0, 1),
+            "F": (2, 0),
+            "G": (0, -1)
+        }
+
+        plt.figure(figsize=(6, 6))
+
+        # Draw edges
+        for node in self.vertices:
+            x, y = positions[node]
+
+            for neighbor in self.edges[node]:
+                x2, y2 = positions[neighbor]
+                plt.plot(
+                    [x, x2],
+                    [y, y2],
+                    color="black"
+                )
+
+        # Draw vertices
+        for node in self.vertices:
+
+            x, y = positions[node]
+
+            plt.scatter(
+                x,
+                y,
+                s=800,
+                color=self.assignment[node],
+                edgecolors="black"
+            )
+
+            plt.text(
+                x,
+                y,
+                node,
+                ha="center",
+                va="center",
+                fontsize=14,
+                color="black"
+            )
+
+        plt.title("Robot Navigation Zone Coloring")
+        plt.axis("off")
+        plt.show()
+
+
+vertices = [
+    "A", "B", "C", "D", "E", "F", "G"
+]
+
+edges = {
+    "A": ["B", "C", "E"],
+    "B": ["A", "D", "E"],
+    "C": ["A", "E", "F"],
+    "D": ["B", "E"],
+    "E": ["A", "B", "C", "D", "F", "G"],
+    "F": ["C", "E", "G"],
+    "G": ["E", "F"]
+}
+
+colors = [
+    "red",
+    "green",
+    "blue",
+    "yellow",
+    "purple"
+]
+
+robot = RobotGraphColoring(
+    vertices,
+    edges,
+    colors
+)
+
+robot.display()
