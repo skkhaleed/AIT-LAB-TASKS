@@ -1,0 +1,34 @@
+weather_graph = {
+    'Station A': ['Station B', 'Station C'],
+    'Station B': ['Station D'],
+    'Station C': ['Station F'],
+    'Station D': ['Station E'],
+    'Station E': [],
+    'Station F': []
+}
+
+weather_data = {
+    'Station A': 'Sunny',
+    'Station B': 'Cloudy',
+    'Station C': 'Rainy',
+    'Station D': 'Stormy',
+    'Station E': 'Windy',
+    'Station F': 'Snowy'
+}
+
+
+def dfs(graph, node, visited):
+    if node not in visited:
+        print(f"{node} reports: {weather_data[node]}")
+        visited.add(node)
+
+        for neighbor in graph[node]:
+            dfs(graph, neighbor, visited)
+
+
+if __name__ == "__main__":
+    visited = set()
+
+    print("Weather forecast (DFS):")
+
+    dfs(weather_graph, 'Station A', visited)
