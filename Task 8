@@ -1,0 +1,23 @@
+# Initial states
+robot_location = "A"
+ladder_location = "B"
+tool_location = "C"
+robot_has_tool = False
+
+print("Robot is at", robot_location)
+
+# Step 1
+robot_location = ladder_location
+print("Robot moved to ladder at", robot_location)
+
+# Step 2
+robot_location = tool_location
+print("Robot moved to tool at", robot_location)
+
+# Step 3
+robot_has_tool = True
+print("Robot picked up the tool")
+
+# Goal state
+print("Goal Reached!")
+print("Robot has tool:", robot_has_tool)
