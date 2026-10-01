@@ -1,0 +1,74 @@
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY")
+)
+
+conversation_history = []
+
+system_prompt = """
+You are an intelligent AI chatbot.
+Answer user questions clearly and accurately.
+Maintain conversational context.
+Provide helpful and relevant responses.
+Use simple language whenever possible.
+"""
+
+
+def generate_response(user_input):
+    global conversation_history
+
+    conversation_history.append({
+        "role": "user",
+        "content": user_input
+    })
+
+    response = client.responses.create(
+        model="gpt-5.5",
+        instructions=system_prompt,
+        input=conversation_history
+    )
+
+    bot_reply = response.output_text
+
+    conversation_history.append({
+        "role": "assistant",
+        "content": bot_reply
+    })
+
+    return bot_reply
+
+
+def chatbot():
+    print("=" * 50)
+    print("Intelligent OpenAI Chatbot")
+    print("=" * 50)
+    print("Bot: Hello! Welcome to AI chatbot.")
+    print("Bot: Type 'exit' to end the conversation.\n")
+
+    while True:
+        user_input = input("You: ").strip()
+
+        if not user_input:
+            print("Bot: Please enter a valid message.\n")
+            continue
+
+        if user_input.lower() == "exit":
+            print("Bot: Goodbye!")
+            break
+
+        try:
+            bot_reply = generate_response(user_input)
+
+            print("Bot:", bot_reply)
+            print()
+
+        except Exception as e:
+            print("Bot: Sorry, an error occurred.")
+            print("Error:", e)
+            print()
+
+
+if __name__ == "__main__":
+    chatbot()
